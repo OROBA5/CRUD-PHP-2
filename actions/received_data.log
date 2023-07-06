@@ -1,0 +1,13 @@
+stdClass Object
+(
+    [typeId] => 3
+    [sku] => 3
+    [name] => 3
+    [price] => 3
+    [product_type_id] => 3
+    [weight] => 3
+    [size] => 3
+    [height] => 3
+    [width] => 3
+    [length] => 3
+)

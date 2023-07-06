@@ -1,67 +1,51 @@
 <?php
 
 class ProductType {
-  public static function createProduct($typeId, $sku, $name, $price, $weight = null, $size = null, $height = null, $width = null, $length = null) {
-      list($className, $productTypeId) = self::getClassNameAndTypeId($typeId);
+    public static function createProduct($formData) {
+        $typeId = $formData['typeId'];
 
-      if (class_exists($className)) {
-          $productClass = new ReflectionClass($className);
+        // Create the product based on the product type ID
+        $product = self::createProductByTypeId($typeId, $formData);
 
-          $productConstructor = $productClass->getConstructor();
-          $parameters = $productConstructor->getParameters();
-          $arguments = [];
+        // Save the product to the database with the product type ID
+        $product->create($typeId, $formData['product_type_id']);
 
-          foreach ($parameters as $parameter) {
-              $parameterName = $parameter->getName();
-              if ($parameterName === 'typeId') {
-                  $arguments[] = $typeId;
-              } elseif ($parameterName === 'sku') {
-                  $arguments[] = $sku;
-              } elseif ($parameterName === 'name') {
-                  $arguments[] = $name;
-              } elseif ($parameterName === 'price') {
-                  $arguments[] = $price;
-              } elseif ($parameterName === 'product_type_id') {
-                  $arguments[] = $productTypeId; // Use the product type ID instead of type ID
-              } elseif ($parameterName === 'weight') {
-                  $arguments[] = $weight;
-              } elseif ($parameterName === 'size') {
-                  $arguments[] = $size;
-              } elseif ($parameterName === 'height') {
-                  $arguments[] = $height;
-              } elseif ($parameterName === 'width') {
-                  $arguments[] = $width;
-              } elseif ($parameterName === 'length') {
-                  $arguments[] = $length;
-              } else {
-                  $arguments[] = null;
-              }
-          }
+        return $product;
+    }
 
-          $product = $productClass->newInstanceArgs($arguments);
+    private static function createProductByTypeId($typeId, $formData) {
+        // Create a mapping of product type IDs to their respective classes
+        $classMap = [
+            1 => Dvd::class,
+            2 => Furniture::class,
+            3 => Book::class
+        ];
 
-          // Save the product to the database with the product type ID
-          $product->create($productTypeId); // Use the product type ID instead of type ID
+        // Check if the product type ID exists in the mapping
+        if (!isset($classMap[$typeId])) {
+            throw new Exception("Invalid product type ID: " . $typeId);
+        }
 
-          return $product;
-      } else {
-          throw new Exception('Invalid product type');
-      }
-  }
+        // Get the class name for the product type ID
+        $className = $classMap[$typeId];
 
-  private static function getClassNameAndTypeId($typeId) {
-      // Map type ID to class name and product type ID
-      $classMap = [
-          1 => ['className' => 'Dvd', 'productTypeId' => 1],
-          2 => ['className' => 'Furniture', 'productTypeId' => 2],
-          3 => ['className' => 'Book', 'productTypeId' => 3],
-      ];
+        // Prepare the arguments for creating the product instance
+        $arguments = [$typeId];
+        foreach ($formData as $field => $value) {
+            if ($field !== 'typeId') {
+                $arguments[] = $value;
+            }
+        }
 
-      if (isset($classMap[$typeId])) {
-          $classData = $classMap[$typeId];
-          return [$classData['className'], $classData['productTypeId']];
-      } else {
-          throw new Exception('Invalid product type');
-      }
-  }
+        // Create the product instance based on the class name and arguments using ReflectionClass
+        return self::createProductInstance($className, $arguments);
+    }
+
+    private static function createProductInstance($className, $arguments) {
+        // Create a ReflectionClass instance for the specified class
+        $reflectionClass = new ReflectionClass($className);
+
+        // Create a new instance of the class with the arguments
+        return $reflectionClass->newInstanceArgs($arguments);
+    }
 }

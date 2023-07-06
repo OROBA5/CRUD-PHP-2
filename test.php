@@ -62,6 +62,9 @@ try {
 } */
 
 
+
+
+/* 
 // Simulate random form input data
 $randomType = rand(1, 3); // Random product type
 $randomSKU = 'sku' . rand(100, 999); // Random SKU
@@ -112,3 +115,34 @@ try {
 } catch (Exception $e) {
     echo "Error creating product: " . $e->getMessage();
 }
+ */
+
+ header("Content-Type: application/json; charset=UTF-8");
+
+$apiUrl = "http://localhost/scandiweb-api/actions/create.php"; // Replace with the actual API endpoint URL
+
+$data = json_encode([
+    'typeId' => 1,
+    'sku' => '25',
+    'name' => 'product',
+    'price' => 10.99,
+    'product_type_id' => 1,
+    'weight' => 20,
+    'size' => 50,
+    'height' => 50,
+    'width' => 50,
+    'length' => 40
+]);
+
+$options = [
+    'http' => [
+        'header' => "Content-Type: application/json\r\n",
+        'method' => 'POST',
+        'content' => $data
+    ]
+];
+
+$context = stream_context_create($options);
+$response = file_get_contents($apiUrl, false, $context);
+
+echo $response;
