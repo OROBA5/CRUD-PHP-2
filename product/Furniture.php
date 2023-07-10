@@ -9,6 +9,7 @@ class Furniture extends Product {
     public $height;
     public $width;
     public $length;
+    private $conn;
 
     // Declare constructor for the Furniture class
     public function __construct($id, $sku, $name, $price, $product_type_id, $height, $width, $length)
@@ -104,5 +105,33 @@ class Furniture extends Product {
         $conn->close();
         return false;
     }
+
+    function read($conn) {
+        if ($this->id) {
+            $stmt = $conn->prepare("
+                SELECT f.*, p.sku, p.name, p.price, p.product_type_id
+                FROM furniture f
+                INNER JOIN product p ON f.product_id = p.id
+                WHERE f.product_id = ?
+            ");
+            $stmt->bind_param("i", $this->id);
+        } else {
+            $stmt = $conn->prepare("
+                SELECT f.*, p.sku, p.name, p.price, p.product_type_id
+                FROM furniture f
+                INNER JOIN product p ON f.product_id = p.id
+            ");
+        }
+    
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+    
+        return $result;
+    }
+    
+    
+
+    
 }
 

@@ -83,5 +83,29 @@ class DVD extends Product {
         $this->conn->close();
         return false;
     }
+
+    function read($conn) {
+        if ($this->id) {
+            $stmt = $conn->prepare("
+                SELECT d.*, p.sku, p.name, p.price, p.product_type_id
+                FROM dvd d
+                INNER JOIN product p ON d.product_id = p.id
+                WHERE d.id = ?
+            ");
+            $stmt->bind_param("i", $this->id);
+        } else {
+            $stmt = $conn->prepare("
+                SELECT d.*, p.sku, p.name, p.price, p.product_type_id
+                FROM dvd d
+                INNER JOIN product p ON d.product_id = p.id
+            ");
+        }
+    
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+    
+        return $result;
+    }
 }
 

@@ -79,6 +79,32 @@ class Book extends Product {
 
          }
      }
+
+     
+     function read($conn) {
+        if ($this->id) {
+            $stmt = $conn->prepare("
+                SELECT b.*, p.sku, p.name, p.price, p.product_type_id
+                FROM book b
+                INNER JOIN product p ON b.product_id = p.id
+                WHERE b.product_id = ?
+            ");
+            $stmt->bind_param("i", $this->id);
+        } else {
+            $stmt = $conn->prepare("
+                SELECT b.*, p.sku, p.name, p.price, p.product_type_id
+                FROM book b
+                INNER JOIN product p ON b.product_id = p.id
+            ");
+        }
+    
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+    
+        return $result;
+    }
+    
 }
 
 

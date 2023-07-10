@@ -5,7 +5,7 @@ class ProductType {
         $typeId = $formData['typeId'];
 
         // Create the product based on the product type ID
-        $product = self::createProductByTypeId($typeId, $formData);
+        $product = self::getProductInstance($typeId, $formData);
 
         // Save the product to the database with the product type ID
         $product->create($typeId, $formData['product_type_id']);
@@ -13,7 +13,40 @@ class ProductType {
         return $product;
     }
 
-    private static function createProductByTypeId($typeId, $formData) {
+    public static function readAllProducts($conn) {
+        $products = [];
+    
+        $productTypeQuery = "SELECT * FROM product_type";
+        $productTypeResult = $conn->query($productTypeQuery);
+    
+        while ($productType = $productTypeResult->fetch_assoc()) {
+            $productClassName = ucfirst($productType['name']);
+            $productClassFile = $productClassName . '.php';
+            include_once $productClassFile;
+    
+            // Create a ReflectionClass instance for the product class
+            $reflectionClass = new ReflectionClass($productClassName);
+    
+            // Create a new instance of the product class without invoking the constructor
+            $product = $reflectionClass->newInstanceWithoutConstructor();
+    
+            // Call the read() method of the product object
+            $result = $product->read($conn);
+    
+            while ($productData = $result->fetch_assoc()) {
+                $products[] = $productData;
+            }
+        }
+    
+        return $products;
+    }
+    
+    
+    
+
+
+
+    private static function getProductInstance($typeId, $formData) {
         // Create a mapping of product type IDs to their respective classes
         $classMap = [
             1 => Dvd::class,
