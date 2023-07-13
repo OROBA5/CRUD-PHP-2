@@ -104,6 +104,20 @@ class Book extends Product {
     
         return $result;
     }
+
+    function delete($conn) {
+        $productId = $this->getId();
+
+        // Delete the book entry
+        $deleteBookStmt = $conn->prepare("DELETE FROM book WHERE product_id = ?");
+        $deleteBookStmt->bind_param("i", $productId);
+        $deleteBookStmt->execute();
+        $deleteBookStmt->close();
+
+        // Call the delete() method of the parent class (Product)
+        parent::delete($conn);
+
+    }
     
 }
 

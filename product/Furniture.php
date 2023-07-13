@@ -130,7 +130,19 @@ class Furniture extends Product {
         return $result;
     }
     
-    
+    function delete($conn) {
+        $productId = $this->getId();
+
+        // Delete the book entry
+        $deleteFurnitureStmt = $conn->prepare("DELETE FROM furniture WHERE product_id = ?");
+        $deleteFurnitureStmt->bind_param("i", $productId);
+        $deleteFurnitureStmt->execute();
+        $deleteFurnitureStmt->close();
+
+        // Call the delete() method of the parent class (Product)
+        parent::delete($conn);
+
+    }
 
     
 }

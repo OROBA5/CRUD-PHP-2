@@ -73,16 +73,14 @@ abstract class Product {
     }
 
     //utilises delete funcion for deleting a product
-    public function delete()
-    {
-        $database = new Database('localhost', 'root', '', 'juniordev.liga.lomakina');
-        $connection = $database->getConnection();
-
-        // Delete from product table
-        $query = "DELETE FROM product WHERE id = ?";
-        $stmt = $connection->prepare($query);
-        $stmt->bind_param("i", $this->id);
-        $stmt->execute();
+    function delete($conn) {
+        $productId = $this->getId();
+    
+        // Delete the product entry
+        $deleteProductStmt = $conn->prepare("DELETE FROM product WHERE id = ?");
+        $deleteProductStmt->bind_param("i", $productId);
+        $deleteProductStmt->execute();
+        $deleteProductStmt->close();
     }
 
 }

@@ -107,5 +107,19 @@ class DVD extends Product {
     
         return $result;
     }
+
+    function delete($conn) {
+        $productId = $this->getId();
+
+        // Delete the book entry
+        $deleteDvdStmt = $conn->prepare("DELETE FROM dvd WHERE product_id = ?");
+        $deleteDvdStmt->bind_param("i", $productId);
+        $deleteDvdStmt->execute();
+        $deleteDvdStmt->close();
+
+        // Call the delete() method of the parent class (Product)
+        parent::delete($conn);
+
+    }
 }
 
