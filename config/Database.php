@@ -1,10 +1,10 @@
 <?php
 class Database{
 	
-	private $host  = 'localhost';
-    private $user  = 'root';
-    private $password   = "";
-    private $database  = "juniordev.liga.lomakina"; 
+	private $host  = 'juniordev-liga-lomakina-do-user-14383075-0.b.db.ondigitalocean.com';
+    private $user  = 'doadmin';
+    private $password   = "AVNS_BXhTwPosmlKs8oU0oNQ";
+    private $database  = "defaultdb"; 
     
     public function getConnection(){		
 		$conn = new mysqli($this->host, $this->user, $this->password, $this->database);

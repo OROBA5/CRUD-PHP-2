@@ -2,13 +2,13 @@
 
 //$server = "server name / ip";
 
-$server = "localhost";
+$server = "juniordev-liga-lomakina-do-user-14383075-0.b.db.ondigitalocean.com";
 
-$username = "root";
+$username = "doadmin";
 
-$password = "";
+$password = "AVNS_BXhTwPosmlKs8oU0oNQ";
 
-$db = "juniordev.liga.lomakina";
+$db = "defaultdb";
 
 
 
