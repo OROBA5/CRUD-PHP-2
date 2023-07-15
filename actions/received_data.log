@@ -1,13 +1,13 @@
 stdClass Object
 (
-    [typeId] => 3
-    [sku] => book3
-    [name] => book3
-    [price] => 3
-    [product_type_id] => 3
-    [weight] => 3
-    [size] => 3
-    [height] => 3
-    [width] => 3
-    [length] => 3
+    [typeId] => 1
+    [sku] => testbookapi
+    [name] => testbookapi
+    [price] => 1
+    [product_type_id] => 1
+    [weight] => 1
+    [size] => 1
+    [height] => 1
+    [width] => 1
+    [length] => 1
 )
