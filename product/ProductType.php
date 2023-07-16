@@ -16,41 +16,30 @@ class ProductType {
     public static function readAllProducts($conn) {
         $products = [];
     
-        // Array mapping of product type names to their respective classes
-        $classMap = [
-            'Book' => Book::class,
-            'DVD' => DVD::class,
-            'Furniture' => Furniture::class
-        ];
-    
         $productTypeQuery = "SELECT * FROM product_type";
         $productTypeResult = $conn->query($productTypeQuery);
     
         while ($productType = $productTypeResult->fetch_assoc()) {
             $productClassName = ucfirst($productType['name']);
+            $productClassFile = $productClassName . '.php';
+            include_once $productClassFile;
     
-            // Check if the product class name exists in the classMap
-            if (isset($classMap[$productClassName])) {
-                $productClass = $classMap[$productClassName];
+            // Create a ReflectionClass instance for the product class
+            $reflectionClass = new ReflectionClass($productClassName);
     
-                // Instantiate the product class using the constructor and pass any required arguments
-                // You need to pass the appropriate arguments here based on the constructor of each product class
-                $product = new $productClass($id, $sku, $name, $price, $product_type_id, $weight, $size, $height, $width, $length);
+            // Create a new instance of the product class without invoking the constructor
+            $product = $reflectionClass->newInstanceWithoutConstructor();
     
-                // Call the read() method of the product object
-                $result = $product->read($conn);
+            // Call the read() method of the product object
+            $result = $product->read($conn);
     
-                while ($productData = $result->fetch_assoc()) {
-                    $products[] = $productData;
-                }
-            } else {
-                echo 'Product class not found for: ' . $productClassName;
+            while ($productData = $result->fetch_assoc()) {
+                $products[] = $productData;
             }
         }
     
         return $products;
     }
-    
 
     public static function deleteProduct($conn, $productId) {
         $productData = self::getProductById($conn, $productId);
