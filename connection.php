@@ -2,7 +2,7 @@
 
 //$server = "server name / ip";
 
-$server = "localhost";
+$server = "juniordev-liga-lomakina-do-user-14383075-0.b.db.ondigitalocean.com";
 
 $username = "doadmin";
 

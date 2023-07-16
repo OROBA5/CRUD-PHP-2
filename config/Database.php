@@ -1,7 +1,7 @@
 <?php
 class Database{
 	
-	private $host  = 'localhost';
+	private $host  = 'juniordev-liga-lomakina-do-user-14383075-0.b.db.ondigitalocean.com';
     private $user  = 'doadmin';
     private $password   = "AVNS_BXhTwPosmlKs8oU0oNQ";
     private $database  = "defaultdb"; 
