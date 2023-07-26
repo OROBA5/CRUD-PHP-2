@@ -1,28 +1,38 @@
-<?
-
-include "./config/Database.php";
-include "./connection.php";
-
-
-echo "PHP api for Scandiweb Junior Test";
-
-try {
-    $database = new Database();
-    $conn = $database->getConnection();
-    
-    // If the connection is successful, you can perform a simple query to verify it.
-    $result = $conn->query('SELECT * FROM products');
-    
-    if ($result) {
-        echo 'Database connection successful!';
-    } else {
-        echo 'Database connection failed: ' . $conn->error;
-    }
-    
-    // Don't forget to close the connection when you're done with it.
-    $conn->close();
-} catch (Exception $e) {
-    echo 'Error connecting to the database: ' . $e->getMessage();
-}
+<?php
+//code for sessions for the test of the website
+session_start();
 ?>
 
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product List</title>
+  <link rel="stylesheet" type="text/css" href="./index.css">
+</head>
+
+<body>
+  <div class="navbar">
+    <h1>Product list</h1>
+    <div class="inner-navbar">
+      <button><a href="./addProduct">ADD</a></button>
+      <form id="deleteForm" method="POST" action="http://localhost/scandiweb-api/actions/delete.php">
+        <button type="submit" id="massDeleteButton">MASS DELETE</button>
+      </form>
+    </div>
+  </div>
+  <div class="product-list">
+    <!-- Products will be displayed here dynamically using JavaScript -->
+  </div>
+  <footer>
+    <h3>Scandiweb Test Assignment</h3>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery library -->
+  <script src="list.js"></script>
+</body>
+
+</html>

@@ -22,6 +22,6 @@ if (!empty($products)) {
     http_response_code(200);
     echo json_encode($products);
 } else {
-    http_response_code(404);
-    echo json_encode(array("message" => "No products found."));
+    http_response_code(200);
+    echo json_encode(array(array("sku" => "0"))); // Return a JSON response with sku=0 as an array
 }

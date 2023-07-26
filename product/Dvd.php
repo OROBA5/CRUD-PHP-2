@@ -1,10 +1,4 @@
 <?php
-
-/* include '../config/Database.php';
-include '../connection.php';
-include './Product.php'; */
-
-
 // DVD subclass for Product
 class DVD extends Product {
     // Declare DVD specific fields

@@ -1,10 +1,5 @@
 <?php
 
-/* include '../config/Database.php';
-include '../connection.php';
-include './Product.php'; */
-
-
 //book subclass for product
 class Book extends Product {
     // declare book specific field
